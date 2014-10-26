@@ -1,0 +1,30 @@
+
+// Use Parse.Cloud.define to define as many cloud functions as you want.
+// For example:
+Parse.Cloud.define("hello", function(request, response) {
+  response.success("Hello world!");
+});
+
+Parse.Cloud.job("moveAnswers", function(request, status) {
+	var Answers = Parse.Object.extend("Answers");
+	var answer = new Answers();
+	var day = new Date();
+	day.setDate(day.getDate()-1);
+	
+	var AnswerInProgress = Parse.Object.extend("AnswerInProgress");
+	var query = new Parse.Query(AnswerInProgress);
+
+	answer.set("answer", "not bad");
+	answer.save(null, {
+		success: function(answer){		
+			alert("new answer created in Answers");
+			status.success("saved successfully");
+		},
+		error: function(answer, error) {
+			alert("error:"+error.message);
+			status.error("An error occured");
+			console.log("Failed!");
+		}
+});
+
+});
