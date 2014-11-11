@@ -6,21 +6,21 @@ Parse.Cloud.define("hello", function(request, response) {
 });
 
 Parse.Cloud.job("moveAnswers", function(request, status) {
-	//update issue time and expiration
 	var Time = Parse.Object.extend("IssueTime");
-	var timeQuery = new Parse.Query(Time);
-	timeQuery.find({
-		success: function(results) {
-			var timeObject = results[0];
-			var expire = new Date();
-			expire.setDate(expire.getDate() + 1);
-			timeObject.set("endDate", expire);
-		},
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
-	});
-
+		var timeQuery = new Parse.Query(Time);
+		timeQuery.find({
+			success: function(results) {
+				var timeObject = results[0];
+				var expire = new Date();
+				expire.setDate(expire.getDate() + 1);
+				timeObject.set("endDate", expire);
+				timeObject.save();
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
+		}); 
+	
 	//update answers
 	var Answers = Parse.Object.extend("Answers");
 	
@@ -65,3 +65,4 @@ Parse.Cloud.job("moveAnswers", function(request, status) {
 	});
 
 });
+
